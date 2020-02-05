@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -9,16 +8,26 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
-public class SaveOrQuitWindow {
+import controller.FrameController;
+
+public class SaveOrQuitWindow extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    protected JPanel container;
 
     public SaveOrQuitWindow() {
-        this.container = new JPanel();
-        this.container.setLayout(new BoxLayout(this.container, BoxLayout.Y_AXIS));
+
+        FrameController fc = new FrameController();
+
+        // fenetre de demande de sauvegarde
+        setTitle("Modifications non enregistrées");
+        setSize(400, 150); // dimension de la fenetre
+        setLocationRelativeTo(null); // RelativeTo pour centrer la fenetre
+        setResizable(false);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
         // blocs
         JPanel msgBlock = new JPanel();
@@ -41,8 +50,7 @@ public class SaveOrQuitWindow {
         btnSave.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // TODO Auto-generated method stub
-                super.mouseClicked(e);
+                fc.saveContactList();
             }
         });
 
@@ -56,13 +64,14 @@ public class SaveOrQuitWindow {
         btnCancel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Component c = (Component) e.getSource();
-				JFrame frame = (JFrame) SwingUtilities.getRoot(c);
-				frame.dispose();
+                dispose();
             }
         });
         
-        this.container.add(msgBlock);
-		this.container.add(btnsBlock);
+        container.add(msgBlock);
+        container.add(btnsBlock);
+
+        add(container);
+        setVisible(true);
 	}
 }
