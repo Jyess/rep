@@ -1,0 +1,85 @@
+package view;
+
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import controller.AddContactController;
+import model.ContactsModel;
+
+public class ContactInfoWindow extends JFrame {
+
+    private static final long serialVersionUID = 1L; 
+
+    public ContactInfoWindow(JFrame previousFrame, JTextField textFieldName, JList<String> contactList,
+			ContactsModel model) {
+        
+        JFrame frame = new JFrame("Informations du contact");
+        frame.setSize(350, 150);
+        frame.setLocationRelativeTo(null);
+
+		JPanel container = new JPanel();
+		container.setLayout(new BoxLayout(container,BoxLayout.Y_AXIS));
+		
+		//blocs
+		JPanel inputBlock = new JPanel();
+		JPanel btnsBlock = new JPanel();
+		
+		//label input
+		JLabel label = new JLabel();
+		label.setText("Entrez les informations du contact");
+		inputBlock.add(label);
+		
+		//input
+		JTextField textFieldInfo = new JTextField();
+		textFieldInfo.setPreferredSize(new Dimension(300,20));
+		inputBlock.add(textFieldInfo);
+		
+		//boutons
+		JButton btnOK = new JButton("OK");
+		JButton btnBack = new JButton("Retour");
+		btnsBlock.add(btnOK);
+		btnsBlock.add(btnBack);
+		
+		//gère bouton retour
+		btnBack.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				frame.dispose();
+				previousFrame.setVisible(true);
+			}
+		});
+		
+		btnOK.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				previousFrame.dispose();
+				frame.dispose();
+
+				String contactName = textFieldName.getText();
+				String contactInfo = textFieldInfo.getText();
+
+				new AddContactController(contactName, contactInfo, contactList, model);
+			}
+        });
+		
+		container.add(inputBlock);
+		container.add(btnsBlock);
+		frame.add(container);
+        
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+	}
+}

@@ -5,32 +5,27 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
+import controller.ContactNameWindowController;
 import controller.DisplayContactInfoController;
 import controller.UpdateContactInfoController;
 import model.ContactsModel;
 
-public class ContactListWindow extends JFrame {
+public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private ContactsModel model;
+	public JList<String> contactList;
 
-	public ContactListWindow() {
+	public MainWindow() {
 
 		model = new ContactsModel();
 
@@ -56,9 +51,9 @@ public class ContactListWindow extends JFrame {
 		btnsBlock.add(btnAdd);
 		btnsBlock.add(btnDelete);
 
-		String[] contactsArray = this.model.contactList(); /****************************************************** */
+		contactList = new JList<String>(model); 
 
-		JList<String> contactList = new JList<String>(contactsArray);
+		// JList<String> contactList = new JList<String>(contactsArray);
 		contactList.setSelectedIndex(0); // default item selected
 		contactList.setVisibleRowCount(4); // nb of row to display without scrolling
 		contactsBlock.add(contactList, BorderLayout.CENTER);
@@ -72,7 +67,7 @@ public class ContactListWindow extends JFrame {
 		infoBlock.add(textField);
 
 		// display default info
-		textField.setText(this.model.findContact(contactList.getSelectedValue())); /****************************************************** */
+		textField.setText(model.getContact(contactList.getSelectedValue()));
 
 		// grise ou non le bouton enregistrer si textfield est focus
 		textField.addFocusListener(new FocusListener() {
@@ -92,25 +87,12 @@ public class ContactListWindow extends JFrame {
 		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
 		contactList.addListSelectionListener(listListener);
 
+		// met à jour les properties 
 		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, contactList, model, frame);
 		textField.addKeyListener(infoListener);
 
-		btnAdd.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// JFrame addContactNameFrame = new JFrame("Ajout d'un contact");
-				// addContactNameFrame.setSize(350, 150);
-				// addContactNameFrame.setLocationRelativeTo(null);
-
-				// AddContactNamePanel addContactNamePanel = new AddContactNamePanel();
-				// addContactNameFrame.add(addContactNamePanel.container);
-
-				// addContactNameFrame.setResizable(false);
-				// addContactNameFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-				// addContactNameFrame.setVisible(true);
-			}
-		});
+		ContactNameWindowController addListener = new ContactNameWindowController(model, contactList);
+		btnAdd.addMouseListener(addListener);
 
 		btnSave.addMouseListener(new MouseAdapter() {
 
@@ -135,7 +117,7 @@ public class ContactListWindow extends JFrame {
 	}
 
 	private static void createAndShowGUI() {
-		new ContactListWindow();
+		new MainWindow();
 	}
 
 	public static void main(String[] args) {	

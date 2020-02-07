@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import model.Contact;
 import model.ContactsModel;
 
 public class UpdateContactInfoController extends JFrame implements KeyListener {
@@ -28,10 +29,10 @@ public class UpdateContactInfoController extends JFrame implements KeyListener {
     }
 
     private void updateContact() {
-        String contactName = this.contactList.getSelectedValue();
+        // String contactName = this.contactList.getSelectedValue();
         String contactInfo = this.textField.getText();
 
-        this.model.createOrEditContact(contactName, contactInfo);
+        // this.model.createOrEditContact(contactName, contactInfo);
 
         this.frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.frame.addWindowListener(new WindowAdapter() {
