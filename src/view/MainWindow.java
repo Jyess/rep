@@ -83,13 +83,13 @@ public class MainWindow extends JFrame {
 			}
 		});
 
-		// affiche les infos de l'item selected
-		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
-		contactList.addListSelectionListener(listListener);
-
 		// met à jour les properties 
 		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, contactList, model, frame);
 		textField.addKeyListener(infoListener);
+
+		// affiche les infos de l'item selected
+		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
+		contactList.addListSelectionListener(listListener);
 
 		ContactNameWindowController addListener = new ContactNameWindowController(model, contactList);
 		btnAdd.addMouseListener(addListener);
@@ -98,7 +98,7 @@ public class MainWindow extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// fc.saveContactList();
+				model.saveContactsInFile();
 			}
 		});
 

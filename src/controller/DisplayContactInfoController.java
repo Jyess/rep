@@ -14,7 +14,6 @@ public class DisplayContactInfoController implements ListSelectionListener {
     private ContactsModel model;
 
     public DisplayContactInfoController(JTextPane textField, JList<String> contactList, ContactsModel model) {
-
         this.textField = textField;
         this.contactList = contactList;
         this.model = model;

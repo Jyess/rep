@@ -57,7 +57,7 @@ public class ContactsModel extends DefaultListModel<String> {
         return this.contactsProp.stringPropertyNames();
     }
 
-    private void generateContactList() {
+    private List<String> generateContactList() {
         clear(); //efface la liste 
 
         Set<String> contactSet = getProperties(); //prend les properties
@@ -67,6 +67,8 @@ public class ContactsModel extends DefaultListModel<String> {
         while (iterator.hasNext()) {
             addElement(iterator.next()); //ajoute les contacts dans l'ordre ASC
         }
+
+        return sortedContactList;
     }
 
     private List<String> sortContactList(Set<String> contactSet) {
@@ -86,8 +88,13 @@ public class ContactsModel extends DefaultListModel<String> {
 
     }
 
-    public void insertAndGenerateList(String contactName, String contactInfo) {
+    public int insertAndGenerateList(String contactName, String contactInfo) {
         setContact(contactName, contactInfo); //ajoute au properties
-        generateContactList(); //génère la nouvelle liste triée
+        List<String> list = generateContactList(); //génère la nouvelle liste triée
+        return list.indexOf(contactName);
+    }
+
+    public void test() {
+        System.out.println(this.contactsProp);
     }
 }
