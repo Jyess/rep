@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -20,20 +21,23 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import controller.FrameController;
+import controller.DisplayContactInfoController;
+import controller.UpdateContactInfoController;
+import model.ContactsModel;
 
 public class ContactListWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private ContactsModel model;
 
 	public ContactListWindow() {
 
-		FrameController fc = new FrameController();
+		model = new ContactsModel();
 
-		setTitle("Liste de contacts");
-		setSize(400, 400); // dimension de la fenetre
-		setLocationRelativeTo(null); // RelativeTo pour centrer la fenetre
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		JFrame frame = new JFrame("Liste de contacts");
+		frame.setSize(400, 400); // dimension de la fenetre
+		frame.setLocationRelativeTo(null); // RelativeTo pour centrer la fenetre
+		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -52,7 +56,7 @@ public class ContactListWindow extends JFrame {
 		btnsBlock.add(btnAdd);
 		btnsBlock.add(btnDelete);
 
-		String[] contactsArray = fc.getContactList();
+		String[] contactsArray = this.model.contactList(); /****************************************************** */
 
 		JList<String> contactList = new JList<String>(contactsArray);
 		contactList.setSelectedIndex(0); // default item selected
@@ -68,7 +72,7 @@ public class ContactListWindow extends JFrame {
 		infoBlock.add(textField);
 
 		// display default info
-		textField.setText(fc.getContact(contactList.getSelectedValue()));
+		textField.setText(this.model.findContact(contactList.getSelectedValue())); /****************************************************** */
 
 		// grise ou non le bouton enregistrer si textfield est focus
 		textField.addFocusListener(new FocusListener() {
@@ -85,50 +89,11 @@ public class ContactListWindow extends JFrame {
 		});
 
 		// affiche les infos de l'item selected
-		contactList.addListSelectionListener(new ListSelectionListener() {
+		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
+		contactList.addListSelectionListener(listListener);
 
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting()) {
-					String contactName = contactList.getSelectedValue();
-					textField.setText(fc.getContact(contactName));
-				}
-			}
-		});
-
-		textField.getDocument().addDocumentListener(new DocumentListener() {
-
-			private void updateContact() {
-				String contactName = contactList.getSelectedValue();
-				String contactInfo = textField.getText();
-
-				fc.setContact(contactName, contactInfo);
-				
-				setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-				addWindowListener(new WindowAdapter() {
-					
-					@Override
-					public void windowClosing(WindowEvent e) {
-						new SaveOrQuitWindow();
-					}
-				});
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				updateContact();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				updateContact();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				updateContact();
-			}
-		});
+		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, contactList, model, frame);
+		textField.addKeyListener(infoListener);
 
 		btnAdd.addMouseListener(new MouseAdapter() {
 
@@ -151,7 +116,7 @@ public class ContactListWindow extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				fc.saveContactList();
+				// fc.saveContactList();
 			}
 		});
 
@@ -164,13 +129,24 @@ public class ContactListWindow extends JFrame {
 		container.add(infoBlock);
 		container.add(btnsBlock);
 
-		add(container);
+		frame.add(container);
 
-		setVisible(true);
+		frame.setVisible(true);
+	}
+
+	private static void createAndShowGUI() {
+		new ContactListWindow();
 	}
 
 	public static void main(String[] args) {	
-		new ContactListWindow();
+		javax.swing.SwingUtilities.invokeLater(new Runnable(){
+		
+			@Override
+			public void run() {
+				createAndShowGUI();
+			}
+
+		});
 	}
 }
 

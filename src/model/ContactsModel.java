@@ -10,16 +10,18 @@ import java.util.Set;
 
 public class ContactsModel {
     
-    String propertiesLocation = "contacts.properties";
-    private Properties contactsProp = new Properties();
+    public static final String PROPERTIES_LOCATION = "contacts.properties";
+
+    private Properties contactsProp;
     
     public ContactsModel() {
+        this.contactsProp = new Properties();
         findAllContacts();
     }
 
     public void saveContacts() {
         // try-with-resources : permet de fermer les streams
-        try (OutputStream out = new FileOutputStream(propertiesLocation)) {
+        try (OutputStream out = new FileOutputStream(PROPERTIES_LOCATION)) {
             this.contactsProp.store(out, "Liste des contacts.");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -27,7 +29,7 @@ public class ContactsModel {
     }
 
     public void findAllContacts() {
-        try (InputStream in = new FileInputStream(propertiesLocation)) {
+        try (InputStream in = new FileInputStream(PROPERTIES_LOCATION)) {
             this.contactsProp.load(in);
 		} catch(IOException ex) {
 			ex.printStackTrace();
@@ -38,7 +40,7 @@ public class ContactsModel {
         return this.contactsProp.getProperty(contactName);
     }
 
-    public void createContact(String contactName, String contactInfo) {
+    public void createOrEditContact(String contactName, String contactInfo) {
         this.contactsProp.setProperty(contactName, contactInfo);
     }
 
@@ -46,9 +48,5 @@ public class ContactsModel {
         findAllContacts();
         Set<String> everyContactName = this.contactsProp.stringPropertyNames();
 		return everyContactName.toArray(new String[everyContactName.size()]);
-    }
-
-    public void test() {
-        System.out.println(contactsProp);
     }
 }
