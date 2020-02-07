@@ -31,7 +31,7 @@ public class UpdateContactInfoController extends JFrame implements KeyListener {
     private void updateContact() {
         String contactName = this.contactList.getSelectedValue();
         String contactInfo = this.textField.getText();
-        System.out.println(contactInfo);
+        
         this.model.setContact(contactName, contactInfo);
     }
 
@@ -53,6 +53,7 @@ public class UpdateContactInfoController extends JFrame implements KeyListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.out.println("closing");
+                // TO DO
             }
         });
     }
