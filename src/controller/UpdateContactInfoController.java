@@ -10,6 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import model.ContactsModel;
+import view.SaveOrQuitWindow;
 
 public class UpdateContactInfoController extends JFrame implements KeyListener {
 
@@ -52,10 +53,12 @@ public class UpdateContactInfoController extends JFrame implements KeyListener {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                System.out.println("closing");
-                // TO DO
+                getSaveOrQuitWindow();
             }
         });
     }
-    
+
+    private void getSaveOrQuitWindow() {
+        new SaveOrQuitWindow(this.model);
+    }
 }
