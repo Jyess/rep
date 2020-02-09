@@ -54,6 +54,7 @@ public class MainWindow extends JFrame {
 		KeyStroke saveShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
 		saveItem.setAccelerator(saveShortcut);
 		saveItem.setMnemonic(KeyEvent.VK_E);
+		saveItem.setEnabled(false);
 
 		JMenuItem exitItem = new JMenuItem("Fermer");
 		KeyStroke exitShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
@@ -96,9 +97,10 @@ public class MainWindow extends JFrame {
 		textField.setText(model.getContact(contactList.getSelectedValue()));
 
 		// met à jour les properties 
-		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, contactList, model, frame);
-		textField.addKeyListener(infoListener);
-		btnSave.addMouseListener(infoListener);
+		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, saveItem, contactList, model, frame);
+		textField.getDocument().addDocumentListener(infoListener);
+		btnSave.addActionListener(infoListener);
+		saveItem.addActionListener(infoListener);
 
 		// affiche les infos de l'item selected
 		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
