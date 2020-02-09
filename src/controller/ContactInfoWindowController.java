@@ -26,6 +26,7 @@ public class ContactInfoWindowController implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        this.previousFrame.setVisible(false);
         new ContactInfoWindow(this.previousFrame, this.textFieldName, this.contactList, this.model);
     }
 

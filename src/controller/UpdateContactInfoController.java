@@ -65,7 +65,7 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(this.saveItem)) {
+        if (e.getSource().equals(this.saveItem) || e.getSource().equals(this.btnSave)) {
             save();
             changeCloseBehavior(false);
         } else if(e.getSource().equals(this.exitItem)) {

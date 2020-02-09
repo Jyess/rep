@@ -53,22 +53,32 @@ public class MainWindow extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 
 		JMenu fileMenu = new JMenu("Fichier");
-		JMenu contactsMenu = new JMenu("Contacts");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
 
 		JMenuItem saveItem = new JMenuItem("Enregister");
 		KeyStroke saveShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
 		saveItem.setAccelerator(saveShortcut);
-		saveItem.setMnemonic(KeyEvent.VK_E);
 		saveItem.setEnabled(false);
 
 		JMenuItem exitItem = new JMenuItem("Fermer");
 		KeyStroke exitShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		exitItem.setAccelerator(exitShortcut);
-		exitItem.setMnemonic(KeyEvent.VK_F);
 
 		fileMenu.add(saveItem);
 		fileMenu.addSeparator();
 		fileMenu.add(exitItem);
+
+		JMenu contactsMenu = new JMenu("Contacts");
+		contactsMenu.setMnemonic(KeyEvent.VK_C);
+
+		JMenuItem addItem = new JMenuItem("Ajouter un contact");
+
+		JMenuItem deleteItem = new JMenuItem("Supprimer le contact");
+		KeyStroke deleteShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+		deleteItem.setAccelerator(deleteShortcut);
+
+		contactsMenu.add(addItem);
+		contactsMenu.add(deleteItem);
 
 		menuBar.add(fileMenu);
 		menuBar.add(contactsMenu);
@@ -128,6 +138,7 @@ public class MainWindow extends JFrame {
 
 		ContactNameWindowController addListener = new ContactNameWindowController(model, contactList);
 		btnAdd.addMouseListener(addListener);
+		addItem.addActionListener(addListener);
 
 		// ajout de tous les blocs au container
 		container.add(menuBarBlock);
