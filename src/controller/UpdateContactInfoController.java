@@ -25,16 +25,18 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
     private JTextPane textField;
     private JButton btnSave;
     private JMenuItem saveItem;
+    private JMenuItem exitItem;
     private JList<String> contactList;
     private ContactsModel model;
     private JFrame frame;
     private WindowAdapter windowListener;
 
-    public UpdateContactInfoController(JTextPane textField, JButton btnSave, JMenuItem saveItem,
+    public UpdateContactInfoController(JTextPane textField, JButton btnSave, JMenuItem saveItem, JMenuItem exitItem,
             JList<String> contactList, ContactsModel model, JFrame frame) {
         this.textField = textField;
         this.btnSave = btnSave;
         this.saveItem = saveItem;
+        this.exitItem = exitItem;
         this.contactList = contactList;
         this.model = model;
         this.frame = frame;
@@ -63,8 +65,12 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        save();
-        changeCloseBehavior(false);
+        if (e.getSource().equals(this.saveItem)) {
+            save();
+            changeCloseBehavior(false);
+        } else if(e.getSource().equals(this.exitItem)) {
+            displaySaveOrQuitWindow();
+        }
     }
 
     private void updateContact() {

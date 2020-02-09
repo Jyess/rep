@@ -2,10 +2,12 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
+import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -14,6 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 import controller.ContactNameWindowController;
 import controller.DisplayContactInfoController;
@@ -67,7 +72,9 @@ public class MainWindow extends JFrame {
 
 		menuBar.add(fileMenu);
 		menuBar.add(contactsMenu);
-		menuBarBlock.add(menuBar, BorderLayout.NORTH);
+		menuBarBlock.add(menuBar, BorderLayout.CENTER);
+		menuBarBlock.setMaximumSize(new Dimension(menuBarBlock.getMaximumSize().width,20));
+		menuBarBlock.setPreferredSize(new Dimension(menuBarBlock.getMaximumSize().width,20));
 
 		// boutons
 		JButton btnSave = new JButton("Enregistrer");
@@ -83,24 +90,37 @@ public class MainWindow extends JFrame {
 		// JList<String> contactList = new JList<String>(contactsArray);
 		contactList.setSelectedIndex(0); // default item selected
 		contactList.setVisibleRowCount(4); // nb of row to display without scrolling
-		contactsBlock.add(contactList, BorderLayout.CENTER);
+		contactsBlock.add(contactList);
 
 		// gère le scroll si height de la liste trop petite
 		JScrollPane scrollContact = new JScrollPane(contactList);
 		contactsBlock.add(scrollContact);
 
+		JLabel label = new JLabel();
+		label.setText("Informations du contact");
+		infoBlock.add(label, BorderLayout.NORTH);
+
+		Border border = label.getBorder();
+		Border margin = new EmptyBorder(5,5,3,0); //counter clockwise
+		label.setBorder(new CompoundBorder(border, margin));
+
 		// affiche les infos d'un contact
 		JTextPane textField = new JTextPane();
-		infoBlock.add(textField);
+		infoBlock.add(textField, BorderLayout.SOUTH);
+
+		// gère le scroll si width de la liste trop petite
+		JScrollPane scrollInfo = new JScrollPane(textField);
+		infoBlock.add(scrollInfo);
 
 		// display default info
 		textField.setText(model.getContact(contactList.getSelectedValue()));
 
 		// met à jour les properties 
-		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, saveItem, contactList, model, frame);
+		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, saveItem, exitItem, contactList, model, frame);
 		textField.getDocument().addDocumentListener(infoListener);
 		btnSave.addActionListener(infoListener);
 		saveItem.addActionListener(infoListener);
+		exitItem.addActionListener(infoListener);
 
 		// affiche les infos de l'item selected
 		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
@@ -108,10 +128,6 @@ public class MainWindow extends JFrame {
 
 		ContactNameWindowController addListener = new ContactNameWindowController(model, contactList);
 		btnAdd.addMouseListener(addListener);
-
-		// gère le scroll si width de la liste trop petite
-		JScrollPane scrollInfo = new JScrollPane(textField);
-		infoBlock.add(scrollInfo);
 
 		// ajout de tous les blocs au container
 		container.add(menuBarBlock);
