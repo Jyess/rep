@@ -29,7 +29,6 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
     private ContactsModel model;
     private JFrame frame;
     private WindowAdapter windowListener;
-    private boolean infoUpdated = false;
 
     public UpdateContactInfoController(JTextPane textField, JButton btnSave, JMenuItem saveItem,
             JList<String> contactList, ContactsModel model, JFrame frame) {
@@ -65,26 +64,29 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
     @Override
     public void actionPerformed(ActionEvent e) {
         save();
+        changeCloseBehavior(false);
     }
 
     private void updateContact() {
         String contactName = this.contactList.getSelectedValue();
         String contactInfo = this.textField.getText();
-
         this.model.setContact(contactName, contactInfo);
 
-        if (!this.infoUpdated) {
-            onClose();
-        }
-
-        enableSaveButtons(this.infoUpdated);
+        enableSaveButtons(true);
+        
+        changeCloseBehavior(true);
     }
 
-    private void onClose() {
-        this.frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        this.frame.addWindowListener(this.windowListener);
-
-        infoUpdated = true;
+    private void changeCloseBehavior(boolean isChanged) {
+        if (isChanged) {
+            //save ?
+            this.frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+            this.frame.addWindowListener(this.windowListener);
+        } else {
+            //close
+            this.frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            this.frame.removeWindowListener(this.windowListener);
+        }
     }
 
     private void enableSaveButtons(boolean isEnabled) {
@@ -101,13 +103,7 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
 
     private void save() {
         this.model.saveContactsInFile();
-
-        this.infoUpdated = false;
-
         enableSaveButtons(false);
-
-        this.frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.frame.removeWindowListener(this.windowListener);
     }
 
     @Override
