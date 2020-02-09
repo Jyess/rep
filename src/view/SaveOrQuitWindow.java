@@ -31,7 +31,7 @@ public class SaveOrQuitWindow extends JFrame {
 
         // label input
         JLabel label = new JLabel();
-        label.setText("Souhaitez-vous sauvegarder vos changements ?");
+        label.setText("Souhaitez-vous enregistrer vos modifications ?");
         msgBlock.add(label);
 
         // boutons

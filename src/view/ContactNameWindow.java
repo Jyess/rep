@@ -60,16 +60,6 @@ public class ContactNameWindow extends JFrame {
 		ContactInfoWindowController infoListener = new ContactInfoWindowController(frame, textFieldName, contactList, model);
 		btnOK.addMouseListener(infoListener);
 		
-		// btnOK.addMouseListener(new MouseAdapter() {
-
-		// 	@Override
-		// 	public void mouseClicked(MouseEvent e) {                
-        //         String contactName = textField.getText();
-        //         new AddContactInfoWindow(frame, contactName, model);
-        //         frame.setVisible(false);
-		// 	}
-		// });
-		
 		container.add(inputBlock);
         container.add(btnsBlock);
         frame.add(container);
