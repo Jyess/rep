@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -53,6 +54,10 @@ public class ContactsModel extends DefaultListModel<String> {
         this.contactsProp.setProperty(contactName, contactInfo);
     }
 
+    public void unsetContact(String contactName) {
+        this.contactsProp.remove(contactName);
+    }
+
     private Set<String> getProperties() {
         return this.contactsProp.stringPropertyNames();
     }
@@ -94,7 +99,33 @@ public class ContactsModel extends DefaultListModel<String> {
         return list.indexOf(contactName);
     }
 
-    public void test() {
-        System.out.println(this.contactsProp);
+    public void deleteAndGenerateList(String contactName) {
+        unsetContact(contactName);
+        generateContactList(); //génère la nouvelle liste triée
+    }
+
+    public boolean updateOccurred() {
+        Properties contactSaved = new Properties();
+
+        try (InputStream in = new FileInputStream(PROPERTIES_LOCATION)) {
+            contactSaved.load(in);
+		} catch(IOException ex) {
+			ex.printStackTrace();
+        }
+
+        Properties contactNotSaved = this.contactsProp;
+
+        HashMap<String,String> pairSaved = new HashMap<String,String>();
+        HashMap<String,String> pairNotSaved = new HashMap<String,String>();
+
+        for (String key : contactSaved.stringPropertyNames()) {
+            pairSaved.put(key, contactSaved.getProperty(key));
+        }
+
+        for (String key : contactNotSaved.stringPropertyNames()) {
+            pairNotSaved.put(key, contactNotSaved.getProperty(key));
+        }
+
+        return !pairSaved.equals(pairNotSaved);
     }
 }

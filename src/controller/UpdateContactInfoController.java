@@ -16,6 +16,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import model.ContactsModel;
+import view.ContactNameWindow;
 import view.SaveOrQuitWindow;
 
 public class UpdateContactInfoController extends JFrame implements ActionListener, DocumentListener {
@@ -70,6 +71,10 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
             changeCloseBehavior(false);
         } else if(e.getSource().equals(this.exitItem)) {
             displaySaveOrQuitWindow();
+        } else if (e.getSource().equals(this.saveItem) || e.getSource().equals(this.btnSave)) {
+            new ContactNameWindow(this.model, this.contactList);
+            enableSaveButtons(true);
+            changeCloseBehavior(true);
         }
     }
 
@@ -78,9 +83,13 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
         String contactInfo = this.textField.getText();
         this.model.setContact(contactName, contactInfo);
 
-        enableSaveButtons(true);
-        
-        changeCloseBehavior(true);
+        if (this.model.updateOccurred()) {
+            enableSaveButtons(true);
+            changeCloseBehavior(true);
+        } else {
+            enableSaveButtons(false);
+            changeCloseBehavior(false);
+        }
     }
 
     private void changeCloseBehavior(boolean isChanged) {

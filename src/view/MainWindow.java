@@ -125,20 +125,20 @@ public class MainWindow extends JFrame {
 		// display default info
 		textField.setText(model.getContact(contactList.getSelectedValue()));
 
-		// met à jour les properties 
+		// update les infos (save, quit) TO RENAME
 		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, saveItem, exitItem, contactList, model, frame);
 		textField.getDocument().addDocumentListener(infoListener);
 		btnSave.addActionListener(infoListener);
 		saveItem.addActionListener(infoListener);
 		exitItem.addActionListener(infoListener);
+		// btnAdd.addActionListener(infoListener);
+		// addItem.addActionListener(infoListener); //obligé action donc tous les boutons action et pas mouse
+		// deleteItem.addActionListener(infoListener);
+		// btnDelete.addActionListener(infoListener);
 
-		// affiche les infos de l'item selected
+		// gère affichage data
 		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
 		contactList.addListSelectionListener(listListener);
-
-		ContactNameWindowController addListener = new ContactNameWindowController(model, contactList);
-		btnAdd.addMouseListener(addListener);
-		addItem.addActionListener(addListener);
 
 		// ajout de tous les blocs au container
 		container.add(menuBarBlock);
