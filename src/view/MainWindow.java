@@ -1,21 +1,11 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.net.URL;
-import java.awt.event.MouseAdapter;
-import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 
-import java.awt.GridLayout;
-
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -23,9 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.JToolBar;
-
-import java.awt.Toolkit;
+import javax.swing.KeyStroke;
 
 import controller.ContactNameWindowController;
 import controller.DisplayContactInfoController;
@@ -58,16 +46,27 @@ public class MainWindow extends JFrame {
 		
 		//menu
 		JMenuBar menuBar = new JMenuBar();
-		add(Box.createVerticalGlue());
-		menuBar.setPreferredSize(new Dimension(10,10));
-		menuBar.setMaximumSize(new Dimension(10,10));
 
 		JMenu fileMenu = new JMenu("Fichier");
-		JMenuItem itemSave = new JMenuItem("Enregister") ;
+		JMenu contactsMenu = new JMenu("Contacts");
 
-		fileMenu.add(itemSave);
+		JMenuItem saveItem = new JMenuItem("Enregister");
+		KeyStroke saveShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
+		saveItem.setAccelerator(saveShortcut);
+		saveItem.setMnemonic(KeyEvent.VK_E);
+
+		JMenuItem exitItem = new JMenuItem("Fermer");
+		KeyStroke exitShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
+		exitItem.setAccelerator(exitShortcut);
+		exitItem.setMnemonic(KeyEvent.VK_F);
+
+		fileMenu.add(saveItem);
+		fileMenu.addSeparator();
+		fileMenu.add(exitItem);
+
 		menuBar.add(fileMenu);
-		menuBarBlock.add(menuBar);
+		menuBar.add(contactsMenu);
+		menuBarBlock.add(menuBar, BorderLayout.NORTH);
 
 		// boutons
 		JButton btnSave = new JButton("Enregistrer");
@@ -122,26 +121,6 @@ public class MainWindow extends JFrame {
 
 		frame.setVisible(true);
 	}
-
-	private JButton makeButton(String imageName, String toolTipText, String altText) {
-        String imgLocation = "/toolbarButtonGraphics/general/" + imageName + ".gif";
-        URL imageURL = MainWindow.class.getResource(imgLocation);
-
-        //Create and initialize the button.
-        JButton button = new JButton();
-        
-        button.setToolTipText(toolTipText);
-        button.setPreferredSize(new Dimension(20,20));
-
-        if (imageURL != null) {                      //image found
-            button.setIcon(new ImageIcon(imageURL, altText));
-        } else {                                     //no image found
-            button.setText(altText);
-            System.err.println("Resource not found: " + imgLocation);
-        }
-
-        return button;
-    }
 
 	private static void createAndShowGUI() {
 		new MainWindow();
