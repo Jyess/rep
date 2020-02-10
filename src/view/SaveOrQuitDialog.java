@@ -5,24 +5,28 @@ import javax.swing.JOptionPane;
 import controller.SaveOrQuitController;
 import model.ContactsModel;
 
-public class SaveOrQuitDialog {
+public class SaveOrQuitDialog extends JOptionPane {
+
+    private static final long serialVersionUID = 1L;
 
     public SaveOrQuitDialog(ContactsModel model) {
 
         Object[] options = {"Enregistrer", "Ne pas enregistrer", "Annuler"};
 
-		int response = JOptionPane.showOptionDialog(
+		int response = showOptionDialog(
             null, 
             "Souhaitez-vous enregistrer vos modifications ?", 
             "Modifications non enregistrées", 
-            JOptionPane.YES_NO_CANCEL_OPTION, 
-            JOptionPane.WARNING_MESSAGE, 
+            YES_NO_CANCEL_OPTION, 
+            WARNING_MESSAGE, 
             null, 
             options, 
             options[0]
         );
 
-        SaveOrQuitController dialog = new SaveOrQuitController(model, response);
+        createDialog("a");
+
+        SaveOrQuitController dialog = new SaveOrQuitController(response, model);
         dialog.action();
     }
 }

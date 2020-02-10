@@ -13,13 +13,11 @@ import model.ContactsModel;
 public class DisplayContactInfoController implements ListSelectionListener {
 
     private JTextPane textField;
-    private JMenuItem deleteItem;
     private JList<String> contactList;
     private ContactsModel model;
 
-    public DisplayContactInfoController(JTextPane textField, JMenuItem deleteItem, JList<String> contactList, ContactsModel model) {
+    public DisplayContactInfoController(JTextPane textField, JList<String> contactList, ContactsModel model) {
         this.textField = textField;
-        this.deleteItem = deleteItem;
         this.contactList = contactList;
         this.model = model;
     }

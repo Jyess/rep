@@ -23,13 +23,16 @@ public class ContactNameWindow {
 		int msgType = JOptionPane.QUESTION_MESSAGE;
 		Object[] options = { "Ajouter", "Annuler" };
 
-		int response = JOptionPane.showOptionDialog(null, components, title, btnType, msgType, null, options, options[0]);
+		JOptionPane.showOptionDialog(null, components, title, btnType, msgType, null, options, options[0]);
 		
 		String contactName = nameInput.getText();
 		String contactInfo = infoInput.getText();
-		int index = model.insertAndGenerateList(contactName, contactInfo);
+ 
+		if (contactName.length() > 0 && contactInfo.length() > 0) {
+			int index = model.insertAndGenerateList(contactName, contactInfo);
 
-		contactList.setSelectedIndex(index);
-		contactList.ensureIndexIsVisible(index); //scroll si hors champ
+			contactList.setSelectedIndex(index);
+			contactList.ensureIndexIsVisible(index); //scroll si hors champ
+		}
 	}
 }

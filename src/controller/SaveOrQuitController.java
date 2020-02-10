@@ -4,12 +4,12 @@ import model.ContactsModel;
 
 public class SaveOrQuitController {
 
-    private ContactsModel model;
     private int response;
+    private ContactsModel model;
 
-    public SaveOrQuitController(ContactsModel model, int response) {
-        this.model = model;
+    public SaveOrQuitController(int response, ContactsModel model) {
         this.response = response;
+        this.model = model;
     }
 
     public void action() {
@@ -21,9 +21,6 @@ public class SaveOrQuitController {
 
             case 1:
                 System.exit(0);
-                break;
-        
-            default:
                 break;
         }
     }

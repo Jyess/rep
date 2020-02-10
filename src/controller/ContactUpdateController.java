@@ -1,7 +1,6 @@
 package controller;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -43,7 +42,10 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
 
             @Override
             public void windowClosing(WindowEvent e) {
-                displaySaveOrQuitWindow();
+                // affiche la fenetre seulement quand on quitte la fenetre principale (sinon joptionspane est affecté)
+                if (frame.isActive()) {
+                    displaySaveOrQuitWindow();
+                }
             }
         };
     }
@@ -72,22 +74,29 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
             displaySaveOrQuitWindow();
         } else if (source.equals("Ajouter") || source.equals("Ajouter un contact")) {
             new ContactNameWindow(this.model, this.contactList);
+
+            //si contact bien ajouté (user n'a pas quitté la fenetre)
             if (this.model.updateOccurred()) {
                 enableSaveButtons(true);
                 changeCloseBehavior(true);
+                afterInsert();
             }
         } else if (source.equals("Supprimer") || source.equals("Supprimer le contact")) {
             this.model.deleteAndGenerateList(this.contactList.getSelectedValue());
             enableSaveButtons(true);
             changeCloseBehavior(true);
+            afterDelete();
         }
     }
 
     private void updateContact() {
         String contactName = this.contactList.getSelectedValue();
         String contactInfo = this.textField.getText();
-        this.model.setContact(contactName, contactInfo);
 
+        if (contactName.length() > 0 && contactInfo.length() > 0) {
+            this.model.setContact(contactName, contactInfo);
+        }
+        
         if (this.model.updateOccurred()) {
             enableSaveButtons(true);
             changeCloseBehavior(true);
@@ -118,6 +127,19 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
             saveItem.setAccelerator(saveShortcut);
         } else {
             this.saveItem.setAccelerator(null);
+        }
+    }
+
+    private void afterInsert() {
+        this.textField.setText(model.getContact(this.contactList.getSelectedValue()));
+    }
+
+    private void afterDelete() {
+        //test si il y a des contacts
+        if (true) {
+            this.contactList.setSelectedIndex(0);
+            this.contactList.ensureIndexIsVisible(0); //scroll si hors champ
+            this.textField.setText(model.getContact(this.contactList.getSelectedValue()));
         }
     }
 

@@ -12,7 +12,6 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -136,7 +135,7 @@ public class MainWindow extends JFrame {
 		btnDelete.addActionListener(infoListener);
 
 		// gère affichage data
-		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, deleteItem, contactList, model);
+		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
 		contactList.addListSelectionListener(listListener);	
 
 		// ajout de tous les blocs au container

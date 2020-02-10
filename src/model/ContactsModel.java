@@ -126,6 +126,9 @@ public class ContactsModel extends DefaultListModel<String> {
             pairNotSaved.put(key, contactNotSaved.getProperty(key));
         }
 
+        // System.out.println(pairNotSaved);
+        // System.out.println(pairSaved);
+
         return !pairSaved.equals(pairNotSaved);
     }
 }
