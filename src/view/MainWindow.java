@@ -3,17 +3,16 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
-import java.awt.Dialog.ModalityType;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -23,7 +22,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import controller.DisplayContactInfoController;
-import controller.UpdateContactInfoController;
+import controller.ContactUpdateController;
 import model.ContactsModel;
 
 public class MainWindow extends JFrame {
@@ -75,8 +74,7 @@ public class MainWindow extends JFrame {
 		JMenuItem addItem = new JMenuItem("Ajouter un contact");
 
 		JMenuItem deleteItem = new JMenuItem("Supprimer le contact");
-		KeyStroke deleteShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
-		deleteItem.setAccelerator(deleteShortcut);
+		deleteItem.setEnabled(false);
 
 		contactsMenu.add(addItem);
 		contactsMenu.add(deleteItem);
@@ -127,7 +125,7 @@ public class MainWindow extends JFrame {
 		textField.setText(model.getContact(contactList.getSelectedValue()));
 
 		// update les infos (save, quit) TO RENAME
-		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, saveItem, contactList, model, frame);
+		ContactUpdateController infoListener = new ContactUpdateController(textField, btnSave, saveItem, contactList, model, frame);
 		textField.getDocument().addDocumentListener(infoListener);
 		btnSave.addActionListener(infoListener);
 		saveItem.addActionListener(infoListener);
@@ -138,7 +136,7 @@ public class MainWindow extends JFrame {
 		btnDelete.addActionListener(infoListener);
 
 		// gère affichage data
-		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
+		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, deleteItem, contactList, model);
 		contactList.addListSelectionListener(listListener);	
 
 		// ajout de tous les blocs au container

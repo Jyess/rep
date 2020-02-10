@@ -20,7 +20,7 @@ import model.ContactsModel;
 import view.ContactNameWindow;
 import view.SaveOrQuitDialog;
 
-public class UpdateContactInfoController extends JFrame implements ActionListener, DocumentListener {
+public class ContactUpdateController extends JFrame implements ActionListener, DocumentListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
     private JFrame frame;
     private WindowAdapter windowListener;
 
-    public UpdateContactInfoController(JTextPane textField, JButton btnSave, JMenuItem saveItem, JList<String> contactList, ContactsModel model, JFrame frame) {
+    public ContactUpdateController(JTextPane textField, JButton btnSave, JMenuItem saveItem, JList<String> contactList, ContactsModel model, JFrame frame) {
         this.textField = textField;
         this.btnSave = btnSave;
         this.saveItem = saveItem;
@@ -70,8 +70,14 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
             changeCloseBehavior(false);
         } else if(source.equals("Quitter")) {
             displaySaveOrQuitWindow();
-        } else if (source.equals("Ajouter")) {
+        } else if (source.equals("Ajouter") || source.equals("Ajouter un contact")) {
             new ContactNameWindow(this.model, this.contactList);
+            if (this.model.updateOccurred()) {
+                enableSaveButtons(true);
+                changeCloseBehavior(true);
+            }
+        } else if (source.equals("Supprimer") || source.equals("Supprimer le contact")) {
+            this.model.deleteAndGenerateList(this.contactList.getSelectedValue());
             enableSaveButtons(true);
             changeCloseBehavior(true);
         }
