@@ -13,6 +13,7 @@ public class SaveOrQuitController {
     }
 
     public void action() {
+        System.out.println(this.response);
         switch (this.response) {
             case 0:
                 this.model.saveContactsInFile();

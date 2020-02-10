@@ -24,13 +24,13 @@ import controller.DisplayContactInfoController;
 import controller.ContactUpdateController;
 import model.ContactsModel;
 
-public class MainWindow extends JFrame {
+public class MainView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private ContactsModel model;
 	public JList<String> contactList;
 
-	public MainWindow() {
+	public MainView() {
 
 		model = new ContactsModel();
 
@@ -150,7 +150,7 @@ public class MainWindow extends JFrame {
 	}
 
 	private static void createAndShowGUI() {
-		new MainWindow();
+		new MainView();
 	}
 
 	public static void main(String[] args) {	

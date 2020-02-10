@@ -16,8 +16,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import model.ContactsModel;
-import view.ContactNameWindow;
-import view.SaveOrQuitDialog;
+import view.AddContactView;
+import view.SaveOrQuitView;
 
 public class ContactUpdateController extends JFrame implements ActionListener, DocumentListener {
 
@@ -42,7 +42,7 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
 
             @Override
             public void windowClosing(WindowEvent e) {
-                // affiche la fenetre seulement quand on quitte la fenetre principale (sinon joptionspane est affecté)
+                // affiche la fenetre seulement quand on quitte la fenetre principale (sinon joptionpane est affecté)
                 if (frame.isActive()) {
                     displaySaveOrQuitWindow();
                 }
@@ -51,7 +51,7 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
     }
 
     private void displaySaveOrQuitWindow() {
-        new SaveOrQuitDialog(this.model);
+        new SaveOrQuitView(this.model);
     }
 
     @Override
@@ -73,18 +73,10 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
         } else if(source.equals("Quitter")) {
             displaySaveOrQuitWindow();
         } else if (source.equals("Ajouter") || source.equals("Ajouter un contact")) {
-            new ContactNameWindow(this.model, this.contactList);
-
-            //si contact bien ajouté (user n'a pas quitté la fenetre)
-            if (this.model.updateOccurred()) {
-                enableSaveButtons(true);
-                changeCloseBehavior(true);
-                afterInsert();
-            }
+            new AddContactView(this.model, this.contactList);
+            afterInsert();
         } else if (source.equals("Supprimer") || source.equals("Supprimer le contact")) {
             this.model.deleteAndGenerateList(this.contactList.getSelectedValue());
-            enableSaveButtons(true);
-            changeCloseBehavior(true);
             afterDelete();
         }
     }
