@@ -1,38 +1,32 @@
 package controller;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import model.ContactsModel;
+import java.awt.Component;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class SaveOrQuitController extends MouseAdapter {
+public class SaveOrQuitController implements ActionListener {
 
-    private JButton btnSave;
-    private JButton btnQuit;
-    private JButton btnCancel;
-    private JFrame frame;
     private ContactsModel model;
 
-    public SaveOrQuitController(JButton btnSave, JButton btnQuit, JButton btnCancel, JFrame frame, ContactsModel model) {
-        this.btnSave = btnSave;
-        this.btnQuit = btnQuit;
-        this.btnCancel = btnCancel;
-        this.frame = frame;
+    public SaveOrQuitController(ContactsModel model) {
         this.model = model;
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        if (this.btnSave.hasFocus()) {
+    public void actionPerformed(ActionEvent e) {
+        String source = e.getActionCommand();
+
+        if (source.equals("Enregistrer")) {
             this.model.saveContactsInFile();
             System.exit(0);
-        } else if (this.btnQuit.hasFocus()) {
+        } else if (source.equals("Ne pas enregistrer")) {
             System.exit(0);
-        } else if (this.btnCancel.hasFocus()) {
-            this.frame.dispose();
+        } else if (source.equals("Annuler")) {
+            SwingUtilities.windowForComponent((Component)e.getSource()).dispose();
         }
     }
 }

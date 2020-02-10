@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -15,15 +16,17 @@ import javax.swing.JTextField;
 import controller.ContactInfoWindowController;
 import model.ContactsModel;
 
-public class ContactNameWindow extends JFrame {
+public class ContactNameWindow extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
 	public ContactNameWindow(ContactsModel model, JList<String> contactList) {
 
-        JFrame frame = new JFrame("Nom du contact");
-        frame.setSize(350, 150);
-        frame.setLocationRelativeTo(null);
+        JDialog dialog = new JDialog((JDialog)null, "Nom du contact");
+        dialog.setSize(350, 135);
+		dialog.setLocationRelativeTo(null);
+		dialog.setResizable(false);
+        dialog.setModalityType(ModalityType.APPLICATION_MODAL);
         
         JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container,BoxLayout.Y_AXIS));
@@ -34,7 +37,7 @@ public class ContactNameWindow extends JFrame {
 		
 		//label input
 		JLabel label = new JLabel();
-		label.setText("Entrez le nom souhaité");
+		label.setText("Entrez le nom du contact :");
 		inputBlock.add(label);
 		
 		//input
@@ -53,19 +56,19 @@ public class ContactNameWindow extends JFrame {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				frame.dispose();
+				dialog.dispose();
 			}
 		});
 
-		ContactInfoWindowController infoListener = new ContactInfoWindowController(frame, textFieldName, contactList, model);
+		ContactInfoWindowController infoListener = new ContactInfoWindowController(dialog, textFieldName, contactList, model);
 		btnOK.addMouseListener(infoListener);
 		
 		container.add(inputBlock);
         container.add(btnsBlock);
-        frame.add(container);
+        dialog.add(container);
 
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
+        dialog.setResizable(false);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
 	}
 }

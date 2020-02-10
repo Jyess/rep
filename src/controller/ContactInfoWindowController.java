@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JTextField;
@@ -12,13 +13,13 @@ import view.ContactInfoWindow;
 
 public class ContactInfoWindowController implements MouseListener {
 
-    private JFrame previousFrame;
+    private JDialog dialog;
     private JTextField textFieldName;
     private JList<String> contactList;
     private ContactsModel model;
 
-    public ContactInfoWindowController(JFrame previousFrame, JTextField textField, JList<String> contactList, ContactsModel model) {
-        this.previousFrame = previousFrame;
+    public ContactInfoWindowController(JDialog dialog, JTextField textField, JList<String> contactList, ContactsModel model) {
+        this.dialog = dialog;
         this.textFieldName = textField;
         this.contactList = contactList;
         this.model = model;
@@ -26,8 +27,8 @@ public class ContactInfoWindowController implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.previousFrame.setVisible(false);
-        new ContactInfoWindow(this.previousFrame, this.textFieldName, this.contactList, this.model);
+        this.dialog.setVisible(false);
+        new ContactInfoWindow(this.dialog, this.textFieldName, this.contactList, this.model);
     }
 
     @Override

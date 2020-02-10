@@ -3,9 +3,11 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
+import java.awt.Dialog.ModalityType;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -20,7 +22,6 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
-import controller.ContactNameWindowController;
 import controller.DisplayContactInfoController;
 import controller.UpdateContactInfoController;
 import model.ContactsModel;
@@ -60,7 +61,7 @@ public class MainWindow extends JFrame {
 		saveItem.setAccelerator(saveShortcut);
 		saveItem.setEnabled(false);
 
-		JMenuItem exitItem = new JMenuItem("Fermer");
+		JMenuItem exitItem = new JMenuItem("Quitter");
 		KeyStroke exitShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		exitItem.setAccelerator(exitShortcut);
 
@@ -126,19 +127,19 @@ public class MainWindow extends JFrame {
 		textField.setText(model.getContact(contactList.getSelectedValue()));
 
 		// update les infos (save, quit) TO RENAME
-		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, saveItem, exitItem, contactList, model, frame);
+		UpdateContactInfoController infoListener = new UpdateContactInfoController(textField, btnSave, saveItem, contactList, model, frame);
 		textField.getDocument().addDocumentListener(infoListener);
 		btnSave.addActionListener(infoListener);
 		saveItem.addActionListener(infoListener);
 		exitItem.addActionListener(infoListener);
-		// btnAdd.addActionListener(infoListener);
-		// addItem.addActionListener(infoListener); //obligé action donc tous les boutons action et pas mouse
-		// deleteItem.addActionListener(infoListener);
-		// btnDelete.addActionListener(infoListener);
+		btnAdd.addActionListener(infoListener);
+		addItem.addActionListener(infoListener); //obligé action donc tous les boutons action et pas mouse
+		deleteItem.addActionListener(infoListener);
+		btnDelete.addActionListener(infoListener);
 
 		// gère affichage data
 		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
-		contactList.addListSelectionListener(listListener);
+		contactList.addListSelectionListener(listListener);	
 
 		// ajout de tous les blocs au container
 		container.add(menuBarBlock);

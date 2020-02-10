@@ -6,25 +6,26 @@ import java.awt.event.MouseAdapter;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controller.AddContactController;
 import model.ContactsModel;
 
-public class ContactInfoWindow extends JFrame {
+public class ContactInfoWindow extends JDialog {
 
     private static final long serialVersionUID = 1L; 
 
-    public ContactInfoWindow(JFrame previousFrame, JTextField textFieldName, JList<String> contactList,
+    public ContactInfoWindow(JDialog previousDialog, JTextField textFieldName, JList<String> contactList,
 			ContactsModel model) {
-        
-        JFrame frame = new JFrame("Informations du contact");
-        frame.setSize(350, 150);
-        frame.setLocationRelativeTo(null);
+		
+		JDialog dialog = new JDialog(previousDialog, "Informations du contact");
+        dialog.setSize(350, 135);
+		dialog.setLocationRelativeTo(null);
+		dialog.setResizable(false);
+        dialog.setModalityType(ModalityType.APPLICATION_MODAL);
 
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container,BoxLayout.Y_AXIS));
@@ -35,7 +36,7 @@ public class ContactInfoWindow extends JFrame {
 		
 		//label input
 		JLabel label = new JLabel();
-		label.setText("Entrez les informations du contact");
+		label.setText("Entrez les informations du contact :");
 		inputBlock.add(label);
 		
 		//input
@@ -54,8 +55,8 @@ public class ContactInfoWindow extends JFrame {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				frame.dispose();
-				previousFrame.setVisible(true);
+				dialog.dispose();
+				previousDialog.setVisible(true);
 			}
 		});
 		
@@ -63,22 +64,25 @@ public class ContactInfoWindow extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				previousFrame.dispose();
-				frame.dispose();
+				dialog.dispose();
+				dialog.dispose();
 
 				String contactName = textFieldName.getText();
 				String contactInfo = textFieldInfo.getText();
 
-				new AddContactController(contactName, contactInfo, contactList, model);
+				int index = model.insertAndGenerateList(contactName, contactInfo);
+
+				contactList.setSelectedIndex(index);
+				contactList.ensureIndexIsVisible(index); //scroll si hors champ
 			}
         });
 		
 		container.add(inputBlock);
 		container.add(btnsBlock);
-		frame.add(container);
+		dialog.add(container);
         
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
+        dialog.setResizable(false);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
 	}
 }

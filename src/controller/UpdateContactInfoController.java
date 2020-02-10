@@ -1,6 +1,7 @@
 package controller;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -17,7 +18,7 @@ import java.awt.event.WindowEvent;
 
 import model.ContactsModel;
 import view.ContactNameWindow;
-import view.SaveOrQuitWindow;
+import view.SaveOrQuitDialog;
 
 public class UpdateContactInfoController extends JFrame implements ActionListener, DocumentListener {
 
@@ -26,18 +27,15 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
     private JTextPane textField;
     private JButton btnSave;
     private JMenuItem saveItem;
-    private JMenuItem exitItem;
     private JList<String> contactList;
     private ContactsModel model;
     private JFrame frame;
     private WindowAdapter windowListener;
 
-    public UpdateContactInfoController(JTextPane textField, JButton btnSave, JMenuItem saveItem, JMenuItem exitItem,
-            JList<String> contactList, ContactsModel model, JFrame frame) {
+    public UpdateContactInfoController(JTextPane textField, JButton btnSave, JMenuItem saveItem, JList<String> contactList, ContactsModel model, JFrame frame) {
         this.textField = textField;
         this.btnSave = btnSave;
         this.saveItem = saveItem;
-        this.exitItem = exitItem;
         this.contactList = contactList;
         this.model = model;
         this.frame = frame;
@@ -51,7 +49,7 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
     }
 
     private void displaySaveOrQuitWindow() {
-        new SaveOrQuitWindow(this.model);
+        new SaveOrQuitDialog(this.model);
     }
 
     @Override
@@ -66,12 +64,13 @@ public class UpdateContactInfoController extends JFrame implements ActionListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(this.saveItem) || e.getSource().equals(this.btnSave)) {
+        String source = e.getActionCommand();
+        if (source.equals("Enregistrer")) {
             save();
             changeCloseBehavior(false);
-        } else if(e.getSource().equals(this.exitItem)) {
+        } else if(source.equals("Quitter")) {
             displaySaveOrQuitWindow();
-        } else if (e.getSource().equals(this.saveItem) || e.getSource().equals(this.btnSave)) {
+        } else if (source.equals("Ajouter")) {
             new ContactNameWindow(this.model, this.contactList);
             enableSaveButtons(true);
             changeCloseBehavior(true);

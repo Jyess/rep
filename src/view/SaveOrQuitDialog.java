@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -9,18 +10,18 @@ import javax.swing.JPanel;
 import controller.SaveOrQuitController;
 import model.ContactsModel;
 
-public class SaveOrQuitWindow extends JFrame {
+public class SaveOrQuitDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
-    public SaveOrQuitWindow(ContactsModel model) {
+    public SaveOrQuitDialog(ContactsModel model) {
 
-        // fenetre de demande de sauvegarde
-        JFrame frame = new JFrame("Modifications non enregistrées");
-        frame.setSize(400, 150); // dimension de la fenetre
-        frame.setLocationRelativeTo(null); // RelativeTo pour centrer la fenetre
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        JDialog dialog = new JDialog((JDialog)null, "Modifications non enregistrées");
+        dialog.setSize(400, 120);
+        dialog.setLocationRelativeTo(null);
+        dialog.setResizable(false);
+        dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -42,16 +43,15 @@ public class SaveOrQuitWindow extends JFrame {
         btnsBlock.add(btnQuit);
         btnsBlock.add(btnCancel);
 
-        SaveOrQuitController listener = new SaveOrQuitController(btnSave, btnQuit, btnCancel, frame, model);
-        btnSave.addMouseListener(listener);
-        btnQuit.addMouseListener(listener);
-        btnCancel.addMouseListener(listener);
+        SaveOrQuitController listener = new SaveOrQuitController(model);
+        btnSave.addActionListener(listener);
+        btnQuit.addActionListener(listener);
+        btnCancel.addActionListener(listener);
         
         container.add(msgBlock);
         container.add(btnsBlock);
-        frame.add(container);
+        dialog.add(container);
 
-        frame.add(container);
-        frame.setVisible(true);
+        dialog.setVisible(true);
 	}
 }
