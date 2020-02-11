@@ -26,10 +26,24 @@ import model.ContactsModel;
 
 public class MainView extends JFrame {
 
+	/**
+     * Constante pour la sérialisation.
+     */
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * La classe qui gère les contacts.
+	 */
 	private ContactsModel model;
+
+	/**
+	 * La liste de contacts.
+	 */
 	public JList<String> contactList;
 
+	/**
+	 * Affiche la fenêtre principale.
+	 */
 	public MainView() {
 
 		model = new ContactsModel();
@@ -156,6 +170,9 @@ public class MainView extends JFrame {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Instancie la classe {@link #MainView}.
+	 */
 	private static void createAndShowGUI() {
 		new MainView();
 	}

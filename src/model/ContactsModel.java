@@ -16,19 +16,38 @@ import java.util.stream.Collectors;
 
 import javax.swing.DefaultListModel;
 
+/**
+ * Classe modèle pour la gestion des contacts.
+ */
 public class ContactsModel extends DefaultListModel<String> {
     
+    /**
+     * Constante pour la sérialisation.
+     */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Chemin du fichier de sauvagarde des contacts.
+     */
     private static final String PROPERTIES_LOCATION = "contacts.properties";
 
+    /**
+     * Liste des contacts.
+     */
     private Properties contactsProp;
     
+    /**
+     * Initialise une liste de propriétés, charge les données existantes et génère une liste de contacts.
+     */
     public ContactsModel() {
         this.contactsProp = new Properties();
         loadContactsFromFile();
         generateContactList();
     }
 
+    /**
+     * Enregistre une liste des contacts dans un fichier.
+     */
     public void saveContactsInFile() {
         // try-with-resources : permet de fermer les streams
         try (OutputStream out = new FileOutputStream(PROPERTIES_LOCATION)) {
@@ -38,6 +57,9 @@ public class ContactsModel extends DefaultListModel<String> {
         }
     }
 
+    /**
+     * Charge une liste des contacts à partir d'un fichier.
+     */
     private void loadContactsFromFile() {
         try (InputStream in = new FileInputStream(PROPERTIES_LOCATION)) {
             this.contactsProp.load(in);
@@ -46,22 +68,44 @@ public class ContactsModel extends DefaultListModel<String> {
         }
     }
 
+    /**
+     * Retourne les informations d'un contact.
+     * @param contactName   le nom du contact
+     * @return              les informations du contact
+     */
     public String getContact(String contactName) {
         return this.contactsProp.getProperty(contactName);
     }
 
+    /**
+     * Définit un nouveau contact.
+     * @param contactName   le nom du contact
+     * @param contactInfo   les informations du contact
+     */
     public void setContact(String contactName, String contactInfo) {
         this.contactsProp.setProperty(contactName, contactInfo);
     }
 
+    /**
+     * Supprime un contact.
+     * @param contactName   le nom du contact
+     */
     public void unsetContact(String contactName) {
         this.contactsProp.remove(contactName);
     }
 
+    /**
+     * Retourne le nom de chaque contact.
+     * @return  un tableau contenant le nom de chaque contact
+     */
     private Set<String> getProperties() {
         return this.contactsProp.stringPropertyNames();
     }
 
+    /**
+     * Génère une liste de contacts.
+     * @return  une liste de contacts triée
+     */
     private List<String> generateContactList() {
         clear(); //efface la liste 
 
@@ -76,14 +120,30 @@ public class ContactsModel extends DefaultListModel<String> {
         return sortedContactList;
     }
 
+    /**
+     * Trie une liste de contact dans l'order alphabétique
+     * @param contactSet    une liste de contacts
+     * @return              une liste de contacts triée
+     */
     private List<String> sortContactList(Set<String> contactSet) {
         List<String> contactList = contactSet.stream().collect(Collectors.toList());
         Collections.sort(contactList, new SortIgnoringCase());
         return contactList;
     }
 
+    /**
+     * Permet de redéfinir la méthode {@link #compare()}
+     */
     private class SortIgnoringCase implements Comparator<Object> {
 
+        /**
+         * Compare deux objets {@code String} sans prendre en compte les majuscules.
+         * @param o1    un objet {@code String}
+         * @param o2    un objet {@code String}
+         * @return      une valeur {@code 0} si les deux objets sont égaux;
+         *              une valeur strictement inférieure à {@code 0} si l'objet est plus petit que celui en paramètre;
+         *              une valeur strictement supérieure à {@code 0} si l'objet est plus grand que celui en paramètre.
+         */
         @Override
         public int compare(Object o1, Object o2) {
             String s1 = (String) o1;
@@ -93,17 +153,33 @@ public class ContactsModel extends DefaultListModel<String> {
 
     }
 
+    /**
+     * Ajoute un contact et regénère une liste.
+     * @param contactName   le nom du contact
+     * @param contactInfo   les informations du contact
+     * @return              un index correspondant à la position du contact dans la liste de contact
+     */
     public int insertAndGenerateList(String contactName, String contactInfo) {
         setContact(contactName, contactInfo); //ajoute au properties
         List<String> list = generateContactList(); //génère la nouvelle liste triée
         return list.indexOf(contactName);
     }
 
+    /**
+     * Supprime un contact et regénère une liste.
+     * @param contactName   le nom du contact
+     */
     public void deleteAndGenerateList(String contactName) {
         unsetContact(contactName);
         generateContactList(); //génère la nouvelle liste triée
     }
 
+    /**
+     * Retourne {@code true} si et seulement si il existe une différence entre la liste de contacts sauvegardée 
+     * et non sauvegardée (c'est-à-dire entre le contenu du fichier existant et les propriétés non sauvegardée dans un fichier).
+     * @return  {@code true} si une mise à jour a eu lieu dans la liste de contacts,
+     *          {@code false} sinon
+     */
     public boolean updateOccurred() {
         Properties contactSaved = new Properties();
 
