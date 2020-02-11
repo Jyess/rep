@@ -33,6 +33,7 @@ public class MainView extends JFrame {
 	public MainView() {
 
 		model = new ContactsModel();
+		contactList = new JList<String>(model); 
 
 		JFrame frame = new JFrame("Liste de contacts");
 		frame.setSize(400, 400); // dimension de la fenetre
@@ -73,7 +74,8 @@ public class MainView extends JFrame {
 		JMenuItem addItem = new JMenuItem("Ajouter un contact");
 
 		JMenuItem deleteItem = new JMenuItem("Supprimer le contact");
-		deleteItem.setEnabled(false);
+		KeyStroke deleteShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+		deleteItem.setAccelerator(deleteShortcut);
 
 		contactsMenu.add(addItem);
 		contactsMenu.add(deleteItem);
@@ -92,8 +94,6 @@ public class MainView extends JFrame {
 		btnsBlock.add(btnSave);
 		btnsBlock.add(btnAdd);
 		btnsBlock.add(btnDelete);
-
-		contactList = new JList<String>(model); 
 
 		// JList<String> contactList = new JList<String>(contactsArray);
 		contactList.setSelectedIndex(0); // default item selected
@@ -121,10 +121,17 @@ public class MainView extends JFrame {
 		infoBlock.add(scrollInfo);
 
 		// display default info
-		textField.setText(model.getContact(contactList.getSelectedValue()));
+		if (contactList.getModel().getSize() > 0) {
+			textField.setText(model.getContact(contactList.getSelectedValue()));
+		}
+
+		if (contactList.getModel().getSize() == 0) {
+			deleteItem.setEnabled(false);
+			btnDelete.setEnabled(false);
+		}
 
 		// update les infos (save, quit) TO RENAME
-		ContactUpdateController infoListener = new ContactUpdateController(textField, btnSave, saveItem, contactList, model, frame);
+		ContactUpdateController infoListener = new ContactUpdateController(textField, btnSave, saveItem, btnDelete, deleteItem, contactList, model, frame);
 		textField.getDocument().addDocumentListener(infoListener);
 		btnSave.addActionListener(infoListener);
 		saveItem.addActionListener(infoListener);

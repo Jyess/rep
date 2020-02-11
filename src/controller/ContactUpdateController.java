@@ -8,6 +8,7 @@ import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.EventQueue;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
@@ -26,15 +27,19 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
     private JTextPane textField;
     private JButton btnSave;
     private JMenuItem saveItem;
+    private JButton btnDelete;
+    private JMenuItem deleteItem;
     private JList<String> contactList;
     private ContactsModel model;
     private JFrame frame;
     private WindowAdapter windowListener;
 
-    public ContactUpdateController(JTextPane textField, JButton btnSave, JMenuItem saveItem, JList<String> contactList, ContactsModel model, JFrame frame) {
+    public ContactUpdateController(JTextPane textField, JButton btnSave, JMenuItem saveItem, JButton btnDelete, JMenuItem deleteItem, JList<String> contactList, ContactsModel model, JFrame frame) {
         this.textField = textField;
         this.btnSave = btnSave;
         this.saveItem = saveItem;
+        this.btnDelete = btnDelete;
+        this.deleteItem = deleteItem;
         this.contactList = contactList;
         this.model = model;
         this.frame = frame;
@@ -42,6 +47,7 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
 
             @Override
             public void windowClosing(WindowEvent e) {
+                // System.out.println(EventQueue.getCurrentEvent()); ?????
                 // affiche la fenetre seulement quand on quitte la fenetre principale (sinon joptionpane est affecté)
                 if (frame.isActive()) {
                     displaySaveOrQuitWindow();
@@ -82,20 +88,22 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
     }
 
     private void updateContact() {
-        String contactName = this.contactList.getSelectedValue();
-        String contactInfo = this.textField.getText();
+        if (this.contactList.getModel().getSize() > 0) {
+            String contactName = this.contactList.getSelectedValue();
+            String contactInfo = this.textField.getText();
 
-        if (contactName.length() > 0 && contactInfo.length() > 0) {
-            this.model.setContact(contactName, contactInfo);
-        }
-        
-        if (this.model.updateOccurred()) {
-            enableSaveButtons(true);
-            changeCloseBehavior(true);
-        } else {
-            enableSaveButtons(false);
-            changeCloseBehavior(false);
-        }
+            if (contactName.length() > 0 && contactInfo.length() > 0) {
+                this.model.setContact(contactName, contactInfo);
+            }
+            
+            if (this.model.updateOccurred()) {
+                toggleSaveButtons(true);
+                changeCloseBehavior(true);
+            } else {
+                toggleSaveButtons(false);
+                changeCloseBehavior(false);
+            }
+        }        
     }
 
     private void changeCloseBehavior(boolean isChanged) {
@@ -110,7 +118,7 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
         }
     }
 
-    private void enableSaveButtons(boolean isEnabled) {
+    private void toggleSaveButtons(boolean isEnabled) {
         this.btnSave.setEnabled(isEnabled);
         this.saveItem.setEnabled(isEnabled);
 
@@ -122,22 +130,40 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
         }
     }
 
+    private void toggleDeleteButtons(boolean isEnabled) {
+        this.btnDelete.setEnabled(isEnabled);
+        this.deleteItem.setEnabled(isEnabled);
+
+        if (isEnabled) {
+            KeyStroke deleteShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+            deleteItem.setAccelerator(deleteShortcut);
+        } else {
+            this.deleteItem.setAccelerator(null);
+            this.textField.setText("");
+        }
+    }
+
     private void afterInsert() {
-        this.textField.setText(model.getContact(this.contactList.getSelectedValue()));
+        if (this.contactList.getModel().getSize() > 0) {
+            this.textField.setText(model.getContact(this.contactList.getSelectedValue()));
+            toggleDeleteButtons(true);
+        }
     }
 
     private void afterDelete() {
         //test si il y a des contacts
-        if (true) {
+        if (contactList.getModel().getSize() > 0) {
             this.contactList.setSelectedIndex(0);
             this.contactList.ensureIndexIsVisible(0); //scroll si hors champ
             this.textField.setText(model.getContact(this.contactList.getSelectedValue()));
+        } else {
+            toggleDeleteButtons(false);
         }
     }
 
     private void save() {
         this.model.saveContactsInFile();
-        enableSaveButtons(false);
+        toggleSaveButtons(false);
     }
 
     @Override
