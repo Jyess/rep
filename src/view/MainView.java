@@ -49,7 +49,7 @@ public class MainView extends JFrame {
 		model = new ContactsModel();
 		contactList = new JList<String>(model); 
 
-		JFrame frame = new JFrame("Liste de contacts");
+		JFrame frame = new JFrame(model.getVariable("main-title"));
 		frame.setSize(400, 400); // dimension de la fenetre
 		frame.setLocationRelativeTo(null); // RelativeTo pour centrer la fenetre
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -66,15 +66,15 @@ public class MainView extends JFrame {
 		//menu
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu("Fichier");
+		JMenu fileMenu = new JMenu(model.getVariable("file"));
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 
-		JMenuItem saveItem = new JMenuItem("Enregister");
+		JMenuItem saveItem = new JMenuItem(model.getVariable("save"));
 		KeyStroke saveShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
 		saveItem.setAccelerator(saveShortcut);
 		saveItem.setEnabled(false);
 
-		JMenuItem exitItem = new JMenuItem("Quitter");
+		JMenuItem exitItem = new JMenuItem(model.getVariable("exit"));
 		KeyStroke exitShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		exitItem.setAccelerator(exitShortcut);
 
@@ -82,12 +82,12 @@ public class MainView extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(exitItem);
 
-		JMenu contactsMenu = new JMenu("Contacts");
+		JMenu contactsMenu = new JMenu(model.getVariable("contacts"));
 		contactsMenu.setMnemonic(KeyEvent.VK_C);
 
-		JMenuItem addItem = new JMenuItem("Ajouter un contact");
+		JMenuItem addItem = new JMenuItem(model.getVariable("add-contact"));
 
-		JMenuItem deleteItem = new JMenuItem("Supprimer le contact");
+		JMenuItem deleteItem = new JMenuItem(model.getVariable("delete-contact"));
 		KeyStroke deleteShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 		deleteItem.setAccelerator(deleteShortcut);
 
@@ -101,9 +101,9 @@ public class MainView extends JFrame {
 		menuBarBlock.setPreferredSize(new Dimension(menuBarBlock.getMaximumSize().width,20));
 
 		// boutons
-		JButton btnSave = new JButton("Enregistrer");
-		JButton btnAdd = new JButton("Ajouter");
-		JButton btnDelete = new JButton("Supprimer");
+		JButton btnSave = new JButton(model.getVariable("save"));
+		JButton btnAdd = new JButton(model.getVariable("add"));
+		JButton btnDelete = new JButton(model.getVariable("delete"));
 		btnSave.setEnabled(false);
 		btnsBlock.add(btnSave);
 		btnsBlock.add(btnAdd);
@@ -119,7 +119,7 @@ public class MainView extends JFrame {
 		contactsBlock.add(scrollContact);
 
 		JLabel label = new JLabel();
-		label.setText("Informations du contact");
+		label.setText(model.getVariable("info"));
 		infoBlock.add(label, BorderLayout.NORTH);
 
 		Border border = label.getBorder();

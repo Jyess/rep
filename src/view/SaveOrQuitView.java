@@ -18,11 +18,11 @@ public class SaveOrQuitView extends JOptionPane {
      */
     public SaveOrQuitView(ContactsModel model) {
 
-        String title = "Modifications non enregistrées";
-		String message = "Souhaitez-vous enregistrer vos modifications ?";
+        String title = model.getVariable("save-quit-title");
+		String message = model.getVariable("question");
 		int btnType = YES_NO_CANCEL_OPTION;
 		int msgType = WARNING_MESSAGE;
-        Object[] options = {"Enregistrer", "Ne pas enregistrer", "Annuler"};
+        Object[] options = {model.getVariable("save"), model.getVariable("do-not-save"), model.getVariable("cancel")};
 
         int response = showOptionDialog(null, message, title, btnType, msgType, null, options, options[0]);
 

@@ -29,20 +29,39 @@ public class ContactsModel extends DefaultListModel<String> {
     /**
      * Chemin du fichier de sauvagarde des contacts.
      */
+    private static final String LANGUAGE_PREFERENCE_LOCATION = "lang/lang.properties";
+
+    /**
+     * Chemin du fichier de la préférence de la langue.
+     */
     private static final String PROPERTIES_LOCATION = "contacts.properties";
 
     /**
      * Liste des contacts.
      */
     private Properties contactsProp;
+
+    /**
+     * Préférence de la langue.
+     */
+    private Properties languagePreference;
+
+    /**
+     * Langue d'affichage.
+     */
+    private Properties language;
     
     /**
      * Initialise une liste de propriétés, charge les données existantes et génère une liste de contacts.
      */
     public ContactsModel() {
         this.contactsProp = new Properties();
+        this.languagePreference = new Properties();
+        this.language = new Properties();
         loadContactsFromFile();
         generateContactList();
+        loadLanguagePreferenceFile();
+        loadLanguageFile();
     }
 
     /**
@@ -67,6 +86,36 @@ public class ContactsModel extends DefaultListModel<String> {
 			ex.printStackTrace();
         }
     }
+
+    /**
+     * Charge la préférence de la langue à partir d'un fichier.
+     */
+    private void loadLanguagePreferenceFile() {
+        try (InputStream in = new FileInputStream(LANGUAGE_PREFERENCE_LOCATION)) {
+            this.languagePreference.load(in);
+		} catch(IOException ex) {
+			ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Charge le fichier langue correspondant.
+     */
+    private void loadLanguageFile() {
+        String lang = this.languagePreference.getProperty("lang");
+        try (InputStream in = new FileInputStream("lang/" + lang + ".properties")) {
+            this.language.load(in);
+		} catch(IOException e1) {
+            //si le fichier de préférence est erroné et qu'une valeur n'est pas valide
+            try {
+                InputStream in = new FileInputStream("lang/fr.properties");
+                this.language.load(in);
+            } catch(IOException e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
 
     /**
      * Retourne les informations d'un contact.
@@ -206,5 +255,14 @@ public class ContactsModel extends DefaultListModel<String> {
         // System.out.println(pairSaved);
 
         return !pairSaved.equals(pairNotSaved);
+    }
+
+    /**
+     * Retourne la valeur de la variable correspondant aux textes de l'application dans la langue correspondate.
+     * @param variable  le nom de la variable à afficher
+     * @return          la valeur de la variable
+     */
+    public String getVariable(String variable) {
+        return this.language.getProperty(variable);        
     }
 }

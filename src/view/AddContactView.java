@@ -21,16 +21,16 @@ public class AddContactView extends JOptionPane {
 	 */
 	public AddContactView(ContactsModel model, JList<String> contactList) {
 
-		JLabel nameLabel = new JLabel("Nom du contact");
+		JLabel nameLabel = new JLabel(model.getVariable("contact-name"));
 		JTextField nameInput = new JTextField();
-		JLabel infoLabel = new JLabel("Informations du contact");
+		JLabel infoLabel = new JLabel(model.getVariable("contact-info"));
 		JTextField infoInput = new JTextField();
 
-		String title = "Ajout d'un contact";
+		String title = model.getVariable("add-title");
 		Object[] components = { nameLabel, nameInput, infoLabel, infoInput };
 		int btnType = OK_CANCEL_OPTION;
 		int msgType = QUESTION_MESSAGE;
-		Object[] options = { "Ajouter", "Annuler" };
+		Object[] options = { model.getVariable("add"), model.getVariable("cancel") };
 
 		int response = showOptionDialog(null, components, title, btnType, msgType, null, options, options[0]);
 		
@@ -43,7 +43,7 @@ public class AddContactView extends JOptionPane {
 			contactList.setSelectedIndex(index);
 			contactList.ensureIndexIsVisible(index); //scroll si hors champ
 		} else if (response == OK_OPTION) {
-			new WarningView();
+			new WarningView(model);
 			new AddContactView(model, contactList);
 		}
 	}

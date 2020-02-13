@@ -124,15 +124,15 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
     @Override
     public void actionPerformed(ActionEvent e) {
         String source = e.getActionCommand();
-        if (source.equals("Enregistrer")) {
+        if (source.equals(this.model.getVariable("save"))) {
             save();
             changeCloseBehavior(false);
-        } else if(source.equals("Quitter")) {
+        } else if(source.equals(this.model.getVariable("exit"))) {
             displaySaveOrQuitWindow();
-        } else if (source.equals("Ajouter") || source.equals("Ajouter un contact")) {
+        } else if (source.equals(this.model.getVariable("add")) || source.equals(this.model.getVariable("add-contact"))) {
             new AddContactView(this.model, this.contactList);
             afterInsert();
-        } else if (source.equals("Supprimer") || source.equals("Supprimer le contact")) {
+        } else if (source.equals(this.model.getVariable("delete")) || source.equals(this.model.getVariable("delete-contact"))) {
             this.model.deleteAndGenerateList(this.contactList.getSelectedValue());
             afterDelete();
         }
