@@ -1,10 +1,13 @@
 package model;
 
+import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -81,7 +84,8 @@ public class ContactsModel extends DefaultListModel<String> {
      */
     private void loadContactsFromFile() {
         try (InputStream in = new FileInputStream(PROPERTIES_LOCATION)) {
-            this.contactsProp.load(in);
+            Reader reader = new InputStreamReader(in, "UTF-8"); //encodage
+            this.contactsProp.load(reader);
 		} catch(IOException ex) {
 			ex.printStackTrace();
         }
@@ -104,12 +108,13 @@ public class ContactsModel extends DefaultListModel<String> {
     private void loadLanguageFile() {
         String lang = this.languagePreference.getProperty("lang");
         try (InputStream in = new FileInputStream("lang/" + lang + ".properties")) {
-            this.language.load(in);
+            Reader reader = new InputStreamReader(in, "UTF-8"); //encodage
+            this.language.load(reader);
 		} catch(IOException e1) {
             //si le fichier de préférence est erroné et qu'une valeur n'est pas valide
-            try {
-                InputStream in = new FileInputStream("lang/fr.properties");
-                this.language.load(in);
+            try (InputStream in = new FileInputStream("lang/fr.properties")) {
+                Reader reader = new InputStreamReader(in, "UTF-8"); //encodage
+                this.language.load(reader);
             } catch(IOException e2) {
                 e2.printStackTrace();
             }
@@ -264,5 +269,17 @@ public class ContactsModel extends DefaultListModel<String> {
      */
     public String getVariable(String variable) {
         return this.language.getProperty(variable);        
+    }
+
+    /**
+     * Retourne la première lettre correspondant à un mot de la barre de menu pour gérer les raccourcis clavier.
+     * @param $key  le nom du menu
+     * @return      la valeur du raccourci clavier
+     */
+    public int getMnemonic(String key) {
+        String value = this.language.getProperty(key);
+        char firstLetter = value.charAt(0);
+
+        return KeyEvent.getExtendedKeyCodeForChar(firstLetter);
     }
 }

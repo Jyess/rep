@@ -67,7 +67,7 @@ public class MainView extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 
 		JMenu fileMenu = new JMenu(model.getVariable("file"));
-		fileMenu.setMnemonic(KeyEvent.VK_F);
+		fileMenu.setMnemonic(model.getMnemonic("file"));
 
 		JMenuItem saveItem = new JMenuItem(model.getVariable("save"));
 		KeyStroke saveShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
@@ -83,7 +83,7 @@ public class MainView extends JFrame {
 		fileMenu.add(exitItem);
 
 		JMenu contactsMenu = new JMenu(model.getVariable("contacts"));
-		contactsMenu.setMnemonic(KeyEvent.VK_C);
+		contactsMenu.setMnemonic(model.getMnemonic("contacts"));
 
 		JMenuItem addItem = new JMenuItem(model.getVariable("add-contact"));
 
