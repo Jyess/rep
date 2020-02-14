@@ -12,6 +12,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -21,6 +22,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import controller.DisplayContactInfoController;
+import controller.LanguageController;
 import controller.ContactUpdateController;
 import model.ContactsModel;
 
@@ -74,11 +76,14 @@ public class MainView extends JFrame {
 		saveItem.setAccelerator(saveShortcut);
 		saveItem.setEnabled(false);
 
+		JMenuItem changeLanguage = new JMenuItem(model.getVariable("change-language"));
+
 		JMenuItem exitItem = new JMenuItem(model.getVariable("exit"));
 		KeyStroke exitShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		exitItem.setAccelerator(exitShortcut);
 
 		fileMenu.add(saveItem);
+		fileMenu.add(changeLanguage);
 		fileMenu.addSeparator();
 		fileMenu.add(exitItem);
 
@@ -144,20 +149,24 @@ public class MainView extends JFrame {
 			btnDelete.setEnabled(false);
 		}
 
-		// update les infos (save, quit) TO RENAME
-		ContactUpdateController infoListener = new ContactUpdateController(textField, btnSave, saveItem, btnDelete, deleteItem, contactList, model, frame);
-		textField.getDocument().addDocumentListener(infoListener);
-		btnSave.addActionListener(infoListener);
-		saveItem.addActionListener(infoListener);
-		exitItem.addActionListener(infoListener);
-		btnAdd.addActionListener(infoListener);
-		addItem.addActionListener(infoListener); //obligé action donc tous les boutons action et pas mouse
-		deleteItem.addActionListener(infoListener);
-		btnDelete.addActionListener(infoListener);
+		// gère les contacts
+		ContactUpdateController contactListener = new ContactUpdateController(textField, btnSave, saveItem, btnDelete, deleteItem, contactList, model, frame);
+		textField.getDocument().addDocumentListener(contactListener);
+		btnSave.addActionListener(contactListener);
+		saveItem.addActionListener(contactListener);
+		exitItem.addActionListener(contactListener);
+		btnAdd.addActionListener(contactListener);
+		addItem.addActionListener(contactListener); //obligé action donc tous les boutons action et pas mouse
+		deleteItem.addActionListener(contactListener);
+		btnDelete.addActionListener(contactListener);
 
-		// gère affichage data
+		// gère affichage des données
 		DisplayContactInfoController listListener = new DisplayContactInfoController(textField, contactList, model);
 		contactList.addListSelectionListener(listListener);	
+
+		// gère les langues
+		LanguageController langListener = new LanguageController(model);
+		changeLanguage.addActionListener(langListener);
 
 		// ajout de tous les blocs au container
 		container.add(menuBarBlock);

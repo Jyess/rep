@@ -103,6 +103,18 @@ public class ContactsModel extends DefaultListModel<String> {
     }
 
     /**
+     * Enregistre la préférence de la langue dans un fichier.
+     */
+    private void saveLanguagePreferenceInFile() {
+        try (OutputStream out = new FileOutputStream(LANGUAGE_PREFERENCE_LOCATION)) {
+            this.languagePreference.store(out, "Langue choisie par défaut.");
+		} catch(IOException ex) {
+			ex.printStackTrace();
+        }
+    }
+
+
+    /**
      * Charge le fichier langue correspondant.
      */
     private void loadLanguageFile() {
@@ -120,7 +132,6 @@ public class ContactsModel extends DefaultListModel<String> {
             }
         }
     }
-
 
     /**
      * Retourne les informations d'un contact.
@@ -214,9 +225,18 @@ public class ContactsModel extends DefaultListModel<String> {
      * @return              un index correspondant à la position du contact dans la liste de contact
      */
     public int insertAndGenerateList(String contactName, String contactInfo) {
-        setContact(contactName, contactInfo); //ajoute au properties
-        List<String> list = generateContactList(); //génère la nouvelle liste triée
-        return list.indexOf(contactName);
+        //vérifie que les deux champs soient remplis et que le contact soit unique
+        if (contactName.length() > 0 && contactInfo.length() > 0 && getContact(contactName) == null) {
+            setContact(contactName, contactInfo); //ajoute au properties
+            List<String> list = generateContactList(); //génère la nouvelle liste triée
+            return list.indexOf(contactName);
+        } else if (contactName.length() == 0 || contactInfo.length() == 0) {
+            return -1;
+        } else if (getContact(contactName) != null) {
+            return -2;
+        } else {
+            return -3;   
+        }
     }
 
     /**
@@ -272,6 +292,22 @@ public class ContactsModel extends DefaultListModel<String> {
     }
 
     /**
+     * Retourne le code de la langue de préférence.
+     * @return     code de la langue de préférence
+     */
+    public String getLanguagePreference() {
+        return this.languagePreference.getProperty("lang");        
+    }
+
+    /**
+     * Définit la langue de préférence.
+     * @return     code de la langue de préférence
+     */
+    public void setLanguagePreference(String value) {
+        this.languagePreference.setProperty("lang", value);        
+    }
+
+    /**
      * Retourne la première lettre correspondant à un mot de la barre de menu pour gérer les raccourcis clavier.
      * @param $key  le nom du menu
      * @return      la valeur du raccourci clavier
@@ -282,4 +318,26 @@ public class ContactsModel extends DefaultListModel<String> {
 
         return KeyEvent.getExtendedKeyCodeForChar(firstLetter);
     }
+
+	public void changeLanguage(String response) {
+        switch (response) {
+            case "Français":
+                setLanguagePreference("fr");
+                break;
+            
+            case "English":
+                setLanguagePreference("en");
+                break;
+
+            case "Español":
+                setLanguagePreference("es");
+                break;
+            
+            case "Deutsch":
+                setLanguagePreference("de");
+                break;
+        }
+
+        saveLanguagePreferenceInFile();
+	}
 }

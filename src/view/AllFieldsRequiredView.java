@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 import model.ContactsModel;
 
-public class WarningView extends JOptionPane {
+public class AllFieldsRequiredView extends JOptionPane {
 
     /**
      * Constante pour la sérialisation.
@@ -14,9 +14,9 @@ public class WarningView extends JOptionPane {
     /**
      * Affiche une fenêtre pour avertir l'utilisateur que tous les champs ne sont pas remplis.
      */
-    public WarningView(ContactsModel model) {
+    public AllFieldsRequiredView(ContactsModel model) {
 
-        String title = model.getVariable("warning-title");
+        String title = model.getVariable("fields-title");
         String message = model.getVariable("fields-required");
         int msgType = WARNING_MESSAGE;
 

@@ -15,7 +15,7 @@ public class SaveOrQuitController {
     private ContactsModel model;
 
     /**
-     * Initialise les attributs à réutilisés et crée le type d'écouteur.
+     * Initialise les attributs à réutilisés.
      * @param response  la réponse de ka fenêtre de confirmation
      * @param model     la classe modèle
      */

@@ -37,14 +37,21 @@ public class AddContactView extends JOptionPane {
 		String contactName = nameInput.getText();
 		String contactInfo = infoInput.getText();
  
-		if (response == OK_OPTION && contactName.length() > 0 && contactInfo.length() > 0) {
-			int index = model.insertAndGenerateList(contactName, contactInfo);
-
-			contactList.setSelectedIndex(index);
-			contactList.ensureIndexIsVisible(index); //scroll si hors champ
-		} else if (response == OK_OPTION) {
-			new WarningView(model);
-			new AddContactView(model, contactList);
+		int index = model.insertAndGenerateList(contactName, contactInfo);
+		
+		if (response == OK_OPTION) {
+			if (index >= 0) {
+				contactList.setSelectedIndex(index);
+				contactList.ensureIndexIsVisible(index); //scroll si hors champ
+			} else if (index == -1) {
+				new AllFieldsRequiredView(model);
+				new AddContactView(model, contactList);
+			} else if (index == -2) {
+				new NotUniqueView(model);
+				new AddContactView(model, contactList);
+			} else {
+				System.exit(1); //error
+			}
 		}
 	}
 }
