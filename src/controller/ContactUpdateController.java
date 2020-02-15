@@ -95,7 +95,9 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
 
             @Override
             public void windowClosing(WindowEvent e) {
-                displaySaveOrQuitWindow();
+                if (frame.isFocused()) {
+                    displaySaveOrQuitWindow();
+                }
             }
         };
     }

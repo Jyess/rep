@@ -33,12 +33,12 @@ public class ContactsModel extends DefaultListModel<String> {
     /**
      * Chemin du fichier de sauvagarde des contacts.
      */
-    private static final String LANGUAGE_PREFERENCE_LOCATION = "lang/lang.properties";
+    private static final String LANGUAGE_PREFERENCE_LOCATION = "src/lang/lang.properties";
 
     /**
      * Chemin du fichier de la préférence de la langue.
      */
-    private static final String PROPERTIES_LOCATION = "contacts.properties";
+    private static final String PROPERTIES_LOCATION = "src/contacts.properties";
 
     /**
      * Liste des contacts.
@@ -120,12 +120,12 @@ public class ContactsModel extends DefaultListModel<String> {
      */
     private void loadLanguageFile() {
         String lang = this.languagePreference.getProperty("lang");
-        try (InputStream in = new FileInputStream("lang/" + lang + ".properties")) {
+        try (InputStream in = new FileInputStream("src/lang/" + lang + ".properties")) {
             Reader reader = new InputStreamReader(in, "UTF-8"); //encodage
             this.language.load(reader);
 		} catch(IOException e1) {
             //si le fichier de préférence est erroné et qu'une valeur n'est pas valide
-            try (InputStream in = new FileInputStream("lang/fr.properties")) {
+            try (InputStream in = new FileInputStream("src/lang/fr.properties")) {
                 Reader reader = new InputStreamReader(in, "UTF-8"); //encodage
                 this.language.load(reader);
             } catch(IOException e2) {
