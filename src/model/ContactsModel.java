@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 
 /**
  * Classe modèle pour la gestion des contacts.
@@ -303,7 +304,7 @@ public class ContactsModel extends DefaultListModel<String> {
      * Définit la langue de préférence.
      * @return     code de la langue de préférence
      */
-    public void setLanguagePreference(String value) {
+    private void setLanguagePreference(String value) {
         this.languagePreference.setProperty("lang", value);        
     }
 
@@ -319,6 +320,10 @@ public class ContactsModel extends DefaultListModel<String> {
         return KeyEvent.getExtendedKeyCodeForChar(firstLetter);
     }
 
+    /**
+     * Change la langue en modifiant la valeur de la langue de préférence et en l'enregistrant dans un fichier.
+     * @param response  code la langue de préférence
+     */
 	public void changeLanguage(String response) {
         switch (response) {
             case "Français":
@@ -339,5 +344,15 @@ public class ContactsModel extends DefaultListModel<String> {
         }
 
         saveLanguagePreferenceInFile();
-	}
+    }
+    
+    /**
+     * Retourne un objet de type ImageIcon.
+     * @param filename      nom du fichier icone
+     * @return              objet ImageIcon
+     */
+    public ImageIcon getIcon(String filename) {
+        String imgPath = "src/media/";
+        return new ImageIcon(imgPath + filename);
+    }
 }

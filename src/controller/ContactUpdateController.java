@@ -95,11 +95,7 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
 
             @Override
             public void windowClosing(WindowEvent e) {
-                // System.out.println(EventQueue.getCurrentEvent()); ?????
-                // affiche la fenetre seulement quand on quitte la fenetre principale (sinon joptionpane est affecté)
-                if (frame.isActive()) {
-                    displaySaveOrQuitWindow();
-                }
+                displaySaveOrQuitWindow();
             }
         };
     }
@@ -108,7 +104,11 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
      * Affiche la fenêtre demandant d'enregistrer ou non les modifications.
      */
     private void displaySaveOrQuitWindow() {
-        new SaveOrQuitView(this.model);
+        if (btnSave.isEnabled()) {
+            new SaveOrQuitView(this.model);
+        } else {
+            this.frame.dispose();
+        }
     }
 
     @Override
@@ -126,7 +126,6 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
         String source = e.getActionCommand();
         if (source.equals(this.model.getVariable("save"))) {
             save();
-            changeCloseBehavior(false);
         } else if(source.equals(this.model.getVariable("exit"))) {
             displaySaveOrQuitWindow();
         } else if (source.equals(this.model.getVariable("add")) || source.equals(this.model.getVariable("add-contact"))) {
@@ -170,8 +169,8 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
             this.frame.addWindowListener(this.windowListener);
         } else {
             //close
-            this.frame.removeWindowListener(this.windowListener);
             this.frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            this.frame.removeWindowListener(this.windowListener);
         }
     }
 
@@ -245,6 +244,7 @@ public class ContactUpdateController extends JFrame implements ActionListener, D
     private void save() {
         this.model.saveContactsInFile();
         toggleSaveButtons(false);
+        changeCloseBehavior(false);
     }
 
     @Override

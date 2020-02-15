@@ -1,5 +1,6 @@
 package view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import model.ContactsModel;
@@ -19,7 +20,8 @@ public class NotUniqueView extends JOptionPane {
         String title = model.getVariable("duplicate-title");
         String message = model.getVariable("not-unique");
         int msgType = WARNING_MESSAGE;
+        ImageIcon icon = model.getIcon("warning.png");
 
-        showMessageDialog(null, message, title, msgType);
+        showMessageDialog(null, message, title, msgType, icon);
 	}
 }

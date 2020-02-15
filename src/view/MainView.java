@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,7 +13,6 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -41,7 +41,7 @@ public class MainView extends JFrame {
 	/**
 	 * La liste de contacts.
 	 */
-	public JList<String> contactList;
+	private JList<String> contactList;
 
 	/**
 	 * Affiche la fenêtre principale.
@@ -55,6 +55,7 @@ public class MainView extends JFrame {
 		frame.setSize(400, 400); // dimension de la fenetre
 		frame.setLocationRelativeTo(null); // RelativeTo pour centrer la fenetre
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		frame.setIconImage(model.getIcon("contact.png").getImage());
 		
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -71,14 +72,14 @@ public class MainView extends JFrame {
 		JMenu fileMenu = new JMenu(model.getVariable("file"));
 		fileMenu.setMnemonic(model.getMnemonic("file"));
 
-		JMenuItem saveItem = new JMenuItem(model.getVariable("save"));
+		JMenuItem saveItem = new JMenuItem(model.getVariable("save"), model.getIcon("save.png"));
 		KeyStroke saveShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
 		saveItem.setAccelerator(saveShortcut);
 		saveItem.setEnabled(false);
 
-		JMenuItem changeLanguage = new JMenuItem(model.getVariable("change-language"));
+		JMenuItem changeLanguage = new JMenuItem(model.getVariable("change-language"), model.getIcon("lang.png"));
 
-		JMenuItem exitItem = new JMenuItem(model.getVariable("exit"));
+		JMenuItem exitItem = new JMenuItem(model.getVariable("exit"), model.getIcon("exit.png"));
 		KeyStroke exitShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		exitItem.setAccelerator(exitShortcut);
 
@@ -90,9 +91,9 @@ public class MainView extends JFrame {
 		JMenu contactsMenu = new JMenu(model.getVariable("contacts"));
 		contactsMenu.setMnemonic(model.getMnemonic("contacts"));
 
-		JMenuItem addItem = new JMenuItem(model.getVariable("add-contact"));
+		JMenuItem addItem = new JMenuItem(model.getVariable("add-contact"), model.getIcon("add.png"));
 
-		JMenuItem deleteItem = new JMenuItem(model.getVariable("delete-contact"));
+		JMenuItem deleteItem = new JMenuItem(model.getVariable("delete-contact"), model.getIcon("del.png"));
 		KeyStroke deleteShortcut = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 		deleteItem.setAccelerator(deleteShortcut);
 

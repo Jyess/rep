@@ -1,5 +1,6 @@
 package view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import controller.SaveOrQuitController;
@@ -21,10 +22,11 @@ public class SaveOrQuitView extends JOptionPane {
         String title = model.getVariable("save-quit-title");
 		String message = model.getVariable("question");
 		int btnType = YES_NO_CANCEL_OPTION;
-		int msgType = WARNING_MESSAGE;
+        int msgType = WARNING_MESSAGE;
+        ImageIcon icon = model.getIcon("warning.png");
         Object[] options = {model.getVariable("save"), model.getVariable("do-not-save"), model.getVariable("cancel")};
 
-        int response = showOptionDialog(null, message, title, btnType, msgType, null, options, options[0]);
+        int response = showOptionDialog(null, message, title, btnType, msgType, icon, options, options[0]);
 
         SaveOrQuitController dialog = new SaveOrQuitController(response, model);
         dialog.action();

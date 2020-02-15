@@ -1,5 +1,6 @@
 package view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -30,9 +31,10 @@ public class AddContactView extends JOptionPane {
 		Object[] components = { nameLabel, nameInput, infoLabel, infoInput };
 		int btnType = OK_CANCEL_OPTION;
 		int msgType = QUESTION_MESSAGE;
+		ImageIcon icon = model.getIcon("add.png");
 		Object[] options = { model.getVariable("add"), model.getVariable("cancel") };
 
-		int response = showOptionDialog(null, components, title, btnType, msgType, null, options, options[0]);
+		int response = showOptionDialog(null, components, title, btnType, msgType, icon, options, options[0]);
 		
 		String contactName = nameInput.getText();
 		String contactInfo = infoInput.getText();

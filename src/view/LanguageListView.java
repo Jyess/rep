@@ -1,5 +1,6 @@
 package view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import model.ContactsModel;
@@ -19,6 +20,7 @@ public class LanguageListView extends JOptionPane {
         String title = model.getVariable("change-language");
         int msgType = PLAIN_MESSAGE;
         Object[] languages = { "Français", "English", "Español", "Deutsch" };
+        ImageIcon icon = model.getIcon("lang.png");
         Object selected = null;
 
         switch (model.getLanguagePreference()) {
@@ -39,7 +41,7 @@ public class LanguageListView extends JOptionPane {
             break;
         }
 
-        String response = (String) showInputDialog(null, "", title, msgType, null, languages, selected);
+        String response = (String) showInputDialog(null, "", title, msgType, icon, languages, selected);
 
         if (response != null) {
             model.changeLanguage(response);
