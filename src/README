@@ -1,0 +1,10 @@
+L'application permet de gérer les contacts et reprend les fonctions de bases prévues mais rajoute divers fonctionnalités.
+Il est possible de modifier la langue d'affichage. Si le fichier langue est modifié, le fichier français est chargé de base.
+Les contacts sont triés dans l'ordre alphabétique.
+On ne peut pas ajouter un contact déjà existant et tous les champs sont obligatoires.
+Tous les contacts et les préférences sont stockées dans des fichiers Properties.
+Des JOptionPane sont utilisés pour afficher des boîtes de dialogues afin d'avertir l'utilisateur.
+L'application utilise l'architecture MVC.
+Des raccourcis clavier sont disponibles pour certains éléments du menu et sont inscrits à côté de ces derniers.
+Les icones de base des fenêtres et boites de dialogues ont été modifiées.
+Toute la documentation est diponible.

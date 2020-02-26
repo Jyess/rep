@@ -1,0 +1,34 @@
+package view;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
+import controller.SaveOrQuitController;
+import model.ContactsModel;
+
+public class SaveOrQuitView extends JOptionPane {
+
+    /**
+     * Constante pour la sérialisation.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Affiche la fenêtre de confirmation de sauvegarde ou non des données.
+     * @param model     la classe de gestion des contacts
+     */
+    public SaveOrQuitView(ContactsModel model) {
+
+        String title = model.getVariable("save-quit-title");
+		String message = model.getVariable("question");
+		int btnType = YES_NO_CANCEL_OPTION;
+        int msgType = WARNING_MESSAGE;
+        ImageIcon icon = model.getIcon("warning.png");
+        Object[] options = {model.getVariable("save"), model.getVariable("do-not-save"), model.getVariable("cancel")};
+
+        int response = showOptionDialog(null, message, title, btnType, msgType, icon, options, options[0]);
+
+        SaveOrQuitController dialog = new SaveOrQuitController(response, model);
+        dialog.action();
+    }
+}
